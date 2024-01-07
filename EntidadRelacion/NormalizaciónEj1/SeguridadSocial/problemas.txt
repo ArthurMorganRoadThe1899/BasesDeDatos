@@ -1,0 +1,5 @@
+(NOTA PREVENTIVA: Lo siento si aquí solo planteo un problema, suelo poner la primera cosa que se me ocurra en notas y acabo haciendo el resto por esquemas mentales, se me olvida apuntar cosas, y luego me da pereza XD)
+
+1:
+Nombre y Teléfonos no se pueden considerar atómicos
+
