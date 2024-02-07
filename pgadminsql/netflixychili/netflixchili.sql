@@ -31,8 +31,8 @@ CREATE TABLE "series"
 CREATE TABLE "type"
 (
 	idN character varying(5),
+	PRIMARY KEY (idN),
     "genero" character varying(16) DEFAULT 'definir',
     CONSTRAINT rulesMovie FOREIGN KEY (movie) REFERENCES movie(title),
-    CONSTRAINT rulesSerie FOREIGN KEY (serie) REFERENCES series(title),
-	PRIMARY KEY (idN)
-);
+    CONSTRAINT rulesSerie FOREIGN KEY (serie) REFERENCES series(title)
+); 
