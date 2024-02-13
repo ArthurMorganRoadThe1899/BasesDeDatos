@@ -1,3 +1,7 @@
+/*=============================
+  = MADE BY JOSE ALBA ARRUFAT =
+  =============================*/
+
 /********************
  * CREAR LAS TABLAS *
  ********************/
@@ -8,9 +12,9 @@ CREATE TABLE casa(
 	region VARCHAR(27),
 	lema VARCHAR(38),
 	PRIMARY KEY (id),
-	CONSTRAINT startName CHECK (nombre NOT LIKE ' %'), /*NO FUNCIONA*/
-	CONSTRAINT endName CHECK (nombre NOT LIKE '% ') /*NO FUNCIONA*/
-
+	CONSTRAINT startName CHECK (nombre NOT LIKE ' %'),
+	CONSTRAINT endName CHECK (nombre NOT LIKE '% '),
+	CONSTRAINT lemaNoN CHECK (lema NOT LIKE '%[0-9]%') /* <-- TENGO QUE ARREGLAR ESTO, NO ME LO PILLA */
 );
 
 CREATE TABLE lugar(
@@ -47,7 +51,6 @@ CREATE TABLE personaje(
 	CONSTRAINT rulesPlace FOREIGN KEY (lugar) REFERENCES lugar(id),
 	CONSTRAINT rulesEpisode FOREIGN KEY (episodio) REFERENCES episodio(id)
 );
-
 
 /*****************************
  * METER DATOS EN LAS TABLAS *
