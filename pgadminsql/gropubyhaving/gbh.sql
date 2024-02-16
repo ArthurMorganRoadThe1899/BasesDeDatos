@@ -7,4 +7,4 @@ CREATE TABLE champion(
     PRIMARY KEY (cnum)
 );
 
-INSERT INTP 
+INSERT INTO champion
