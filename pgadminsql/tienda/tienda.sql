@@ -1,3 +1,4 @@
+/*https://docs.google.com/document/d/1ERF_kOHibI_6BEjGB8gtsOklzMnW2EAX/edit?usp=sharing&ouid=112152042181226450170&rtpof=true&sd=true*/
 CREATE TABLE fabricante (
   id INT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL
@@ -6,7 +7,7 @@ CREATE TABLE fabricante (
 CREATE TABLE producto (
   id INT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
-  precio DOUBLE NOT NULL,
+  precio double precision NOT NULL,
   id_fabricante INT NOT NULL,
   FOREIGN KEY (id_fabricante) REFERENCES fabricante(id)
 );
@@ -32,3 +33,22 @@ INSERT INTO producto VALUES(8, 'Portátil Yoga 520', 559, 2);
 INSERT INTO producto VALUES(9, 'Portátil Ideapd 320', 444, 2);
 INSERT INTO producto VALUES(10, 'Impresora HP Deskjet 3720', 59.99, 3);
 INSERT INTO producto VALUES(11, 'Impresora HP Laserjet Pro M26nw', 180, 3);
+
+/***************************************************************************
+ * 1. LISTA EL NOMBRE DE TODOS LOS PRODUCTOS QUE HAY EN LA TABLA PRODUCTO*
+ ***************************************************************************/
+SELECT nombre FROM producto;
+
+/**********************************************************************************
+ * 2. LISTA LOS NOMBRES Y LOS PRECIOS DE TODOS LOS PRODUCTOS DE LA TABLA PRODUCTO *
+ **********************************************************************************/
+SELECT nombre, precio FROM producto;
+
+/****************************************************
+ * 3. LISTA TODAS LAS COLUMNAS DE LA TABLA PRODUCTO *
+ ****************************************************/
+SELECT * FROM producto;
+
+/********************************************************************************************************
+ * 4. LISTA EL NOMBRE DE LOS PRODUCTOS, EL PRECIO EN EUROS Y EL PRECIO EN DÓLARES ESTADOUNIDENSES (USD) *
+ ********************************************************************************************************/
