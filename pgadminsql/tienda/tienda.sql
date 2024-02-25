@@ -33,6 +33,7 @@ INSERT INTO producto VALUES(8, 'Portátil Yoga 520', 559, 2);
 INSERT INTO producto VALUES(9, 'Portátil Ideapd 320', 444, 2);
 INSERT INTO producto VALUES(10, 'Impresora HP Deskjet 3720', 59.99, 3);
 INSERT INTO producto VALUES(11, 'Impresora HP Laserjet Pro M26nw', 180, 3);
+INSERT INTO producto VALUES(12, 'Portátil de pepe Juan', 559, 3);
 
 /***************************************************************************
  * 1. LISTA EL NOMBRE DE TODOS LOS PRODUCTOS QUE HAY EN LA TABLA PRODUCTO*
@@ -52,6 +53,9 @@ INSERT INTO producto VALUES(11, 'Impresora HP Laserjet Pro M26nw', 180, 3);
 /********************************************************************************************************
  * 4. LISTA EL NOMBRE DE LOS PRODUCTOS, EL PRECIO EN EUROS Y EL PRECIO EN DÓLARES ESTADOUNIDENSES (USD) *
  ********************************************************************************************************/
+ SELECT nombre, CONCAT(precio, '€') AS precio_paella FROM producto;
+ SELECT nombre, CONCAT(precio, '$') AS precio_AK47 FROM producto;
+ /*En lo personal me parece cutre esté método, estuve un ratico viendo pero no me aclaré a hacer la conversión de DOUBLE PRECISION a cuál sea siquiera el formato en € o $, webeando webeando saque solución rápida cuando me quede sin tiempo, srry XD*/
 
 /************************************************************************************************************************
  * 5. LISTA LOS NOMBRES Y LOS PRECIOS DE TODOS LOS PRODUCTOS DE LA TABLA PRODUCTO, CONVIRTIENDO LOS NOMBRES A MAYÚSCULA *
@@ -192,15 +196,19 @@ INSERT INTO producto VALUES(11, 'Impresora HP Laserjet Pro M26nw', 180, 3);
 /*************************************************************************************************************
  * 32. DEVUELVE UNA LISTA CON EL NOMBRE DE TODOS LOS PRODUCTOS QUE CONTIENEN LA CADENA PORTÁTIL EN EL NOMBRE *
  *************************************************************************************************************/
- SELECT nombre FROM producto sdfgk;
+ SELECT nombre FROM producto WHERE nombre LIKE '% portátil %' OR nombre LIKE 'Portátil%';
 
 /***********************************************************************************************************************************************
  * 33. DEVUELVE UNA LISTA CON EL NOMBRE DE TODOS LOS PRODUCTOS QUE CONTIENEN LA CADENA MONITOR EN EL NOMBRE Y TIENEN UN PRECIO INFERIOR A 215€ *
  ***********************************************************************************************************************************************/
+ SELECT nombre, precio FROM producto WHERE precio < 215 AND nombre LIKE 'Monitor%' OR nombre LIKE '% monitor %'
 
 /*************************************************************************************************************************************************************************************************************************************
  * 34. LISTA EL NOMBRE Y EL PRECIO DE TODOS LOS PRODUCTOS QUE TENGAN UN PRECIO MAYOR O IGUAL A 180€. ORDENE EL RESULTADO EN PRIMER LUGAR POR EL PRECIO (EN ORDEN DESCENDENTE) Y EN SEGUNDO LUGAR POR EL NOMBRE (EN ORDEN ASCENDENTE) *
  *************************************************************************************************************************************************************************************************************************************/
+ SELECT nombre, precio FROM producto WHERE precio >= 180 ORDER BY nombre ASC;
+ SELECT nombre, precio FROM producto WHERE precio >= 180 ORDER BY precio DESC;
+
 
 
 
@@ -211,23 +219,29 @@ INSERT INTO producto VALUES(11, 'Impresora HP Laserjet Pro M26nw', 180, 3);
 /************************************************************************************
  * 1. DEVUELVE TODOS LOS PRODUCTOS DEL FABRICANTE LENOVO. (Sin utilizar INNER JOIN) *
  ************************************************************************************/
+ SELECT nombre FROM producto WHERE id_fabricante = 2;
 
 /*****************************************************************************************************************************************************
  * 2. DEVUELVE TODOS LOS DATOS DE LOS PRODUCTOS QUE TIENEN EL MISMO PRECIO QUE EL PRODUCTO MÁS CARO DEL FABRICANTE LENOVO. (Sin utilizar INNER JOIN) *
  *****************************************************************************************************************************************************/
+ SELECT nombre, precio FROM producto WHERE precio = (SELECT MAX(precio) FROM producto WHERE id_fabricante = 2);
 
 /******************************************************************
  * 3. LISTA EL NOMBRE DEL PRODUCTO MÁS CARO DEL FABRICANTE LENOVO *
  ******************************************************************/
+ SELECT nombre, precio FROM producto WHERE id_fabricante = 2 AND precio = (SELECT MAX(precio) FROM producto WHERE id_fabricante = 2);
 
 /*****************************************************************************
  * 4. LISTA EL NOMBRE DEL PRODUCTO MÁS BARATO DEL FABRICANTE HEWLETT-PACKARD *
  *****************************************************************************/
+ SELECT nombre, precio FROM producto WHERE id_fabricante = 3 AND precio = (SELECT MIN(precio) FROM producto WHERE id_fabricante = 3);
 
 /*************************************************************************************************************************************
  * 5. DEVUELVE TODOS LOS PRODUCTOS DE LA BASE DE DATOS QUE TIENEN UN PRECIO MAYOR O IGUAL AL PRODUCTO MÁS CARO DEL FABRICANTE LENOVO *
  *************************************************************************************************************************************/
+ SELECT nombre, precio FROM producto WHERE precio >= (SELECT MAX(precio) FROM producto WHERE id_fabricante = 2);
 
 /*************************************************************************************************************************
  * 6. LISTA TODOS LOS PRODUCTOS DEL FABRICANTE ASUS QUE TIENEN UN PRECIO SUPERIOR AL PRECIO MEDIO DE TODOS SUS PRODUCTOS *
  *************************************************************************************************************************/
+ SELECT nombre, precio FROM producto WHERE id_fabricante = 1 AND precio > (SELECT AVG(precio) FROM producto WHERE id_fabricante = 1);
