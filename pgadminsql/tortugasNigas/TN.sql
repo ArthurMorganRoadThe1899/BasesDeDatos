@@ -70,10 +70,12 @@ INSERT INTO pedidos (id_tortuga, id_pizza, fecha) VALUES
 /************************************************************************************
  * 1. CONSULTA PARA CALCULAR EL PROMEDIO DE INGREDIENTES POR PIZZA PARA CADA TAMAÑO *
  ************************************************************************************/
+ SELECT tamaño, AVG(numero_ingredientes) FROM pizzas GROUP BY tamaño;
 
 /***************************************************************************************************
  * 2. CONSULTA PARA CALCULAR EL NÚMERO TOTAL DE INGREDIENTES EN PIZZAS PARA CADA INGREDIENTE EXTRA *
  ***************************************************************************************************/
+ SELECT ingrediente_extra, MAX(numero_ingredientes) FROM pizzas GROUP BY ingrediente_extra; /* ? */
 
 /*******************************************************************************************
  * 3. CONSULTA PARA CALCULAR EL NÚMERO PROMEDIO DE INGREDIENTES POR PIZZA PARA CADA TAMAÑO *
