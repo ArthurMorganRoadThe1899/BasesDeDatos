@@ -77,21 +77,20 @@ INSERT INTO pedidos (id_tortuga, id_pizza, fecha) VALUES
  ***************************************************************************************************/
  SELECT ingrediente_extra, MAX(numero_ingredientes) FROM pizzas GROUP BY ingrediente_extra; /* ? */
 
-/*******************************************************************************************
- * 3. CONSULTA PARA CALCULAR EL NÚMERO PROMEDIO DE INGREDIENTES POR PIZZA PARA CADA TAMAÑO *
- *******************************************************************************************/
 
 /**********************************************************************************
- * 4. CONSULTA PARA CALCULAR EL NÚMERO TOTAL DE PEDIDOS REALIZADOS POR CADA NINJA *
+ * 3. CONSULTA PARA CALCULAR EL NÚMERO TOTAL DE PEDIDOS REALIZADOS POR CADA NINJA *
  **********************************************************************************/
+ SELECT id_tortuga, COUNT(id_pizza) AS pedidos_totales FROM pedidos GROUP BY id_tortuga; 
 
 /***********************************************************************************************
- * 5. CONSULTA PARA CALCULAR LA CANTIDAD TOTAL DE PIZZAS PEDIDAS POR CADA TAMAÑO, ORDENADAS DE *
+ * 4. CONSULTA PARA CALCULAR LA CANTIDAD TOTAL DE PIZZAS PEDIDAS POR CADA TAMAÑO, ORDENADAS DE *
  *                                        MAYOR A MENOR                                        *
  ***********************************************************************************************/
+ SELECT COUNT(id_pizza), tamaño FROM pizzas WHERE id_pizza IN(SELECT id_pizza FROM pedidos) GROUP BY tamaño ORDER BY tamaño DESC;
 
 /*********************************************************************************
- * 6. CONSULTA PARA CALCULAR EL NÚMERO PROMEDIO DE PIZZAS PEDIDAS POR CADA NINJA *
+ * 5. CONSULTA PARA CALCULAR EL NÚMERO PROMEDIO DE PIZZAS PEDIDAS POR CADA NINJA *
  *********************************************************************************/
-
+ SELECT id_tortuga, AVG(id_pedido) FROM pedidos GROUP BY id_tortuga; 
  
