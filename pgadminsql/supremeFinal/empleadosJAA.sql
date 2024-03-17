@@ -194,6 +194,54 @@ INSERT INTO empleado VALUES(13, '82635162B', 'Juan Antonio','Sáez', 'Guerrero',
  * 27. DEVUELVE UNA LISTA CON EL NOMBRE DE LOS DEPARTAMENTOS, GASTOS Y PRESUPUESTO, DE AQUELLOS *
  *       DEPARTAMENTOS DONDE LOS GASTOS SEAN MAYORES QUE EL PRESUPUESTO DEL QUE DISPONEN        *
  ************************************************************************************************/
- SELECT nombre, presupuesto, gastos FROM departamento;
+ SELECT nombre, presupuesto, gastos FROM departamento WHERE presupuesto < gastos;
 
+/************************************************************************************************
+ * 28. DEVUELVE UNA LISTA CON EL NOMBRE DE LOS DEPARTAMENTOS, GASTOS Y PRESUPUESTO, DE AQUELLOS *
+ *       DEPARTAMENTOS DONDE LOS GASTOS SEAN MENORES QUE EL PRESUPUESTO DEL QUE DISPONEN        *
+ ************************************************************************************************/
+ SELECT nombre, presupuesto, gastos FROM departamento WHERE presupuesto > gastos;
 
+/*************************************************************************************************
+ * 29.  DEVUELVE UNA LISTA CON EL NOMBRE DE LOS DEPARTAMENTOS, GASTOS Y PRESUPUESTO, DE AQUELLOS *
+ *         DEPARTAMENTOS DONDE LOS GASTOS SEAN IGUALES AL PRESUPUESTO DEL QUE DISPONEN           *
+ *************************************************************************************************/
+ SELECT nombre, presupuesto, gastos FROM departamento WHERE presupuesto = gastos;
+
+/******************************************************************************
+ * 30. LISTA TODOS LOS DATOS DE LOS EMPLEADOS CUYO SEGUNDO APELLIDO SEA NULL  *
+ ******************************************************************************/
+ SELECT * FROM empleado WHERE apellido2 IS NULL;
+
+/**********************************************************************************
+ * 31.  LISTA TODOS LOS DATOS DE LOS EMPLEADOS CUYO SEGUNDO APELLIDO NO SEA NULL  *
+ **********************************************************************************/
+ SELECT * FROM empleado WHERE apellido2 IS NOT NULL;
+
+/******************************************************************************
+ * 32. LISTA TODOS LOS DATOS DE LOS EMPLEADOS CUYO SEGUNDO APELLIDO SEA LÓPEZ *
+ ******************************************************************************/
+ SELECT * FROM empleado WHERE apellido2 LIKE 'López';
+
+/*****************************************************************************************************
+ * 33.  LISTA TODOS LOS DATOS DE LOS EMPLEADOS CUYO SEGUNDO APELLIDO SEA DÍAZ O MORENO. SIN UTILIZAR *
+ *                                          EL OPERADOR IN                                           *
+ *****************************************************************************************************/
+ SELECT * FROM empleado WHERE apellido2 LIKE 'Díaz' OR apellido2 LIKE 'Moreno';
+
+/***************************************************************************************************
+ * 34.  LISTA TODOS LOS DATOS DE LOS EMPLEADOS CUYO SEGUNDO APELLIDO SEA DÍAZ O MORENO. UTILIZANDO *
+ *                                         EL OPERADOR IN                                          *
+ ***************************************************************************************************/
+ SELECT * FROM empleado WHERE apellido2 IN ('Díaz', 'Moreno');
+
+/*********************************************************************************************
+ * 35. LISTA LOS NOMBRES, APELLIDOS Y NIF DE LOS EMPLEADOS QUE TRABAJAN EN EL DEPARTAMENTO 3 *
+ *********************************************************************************************/
+ SELECT nombre, apellido1, apellido2, nif FROM empleado WHERE id_departamento = 3;
+
+/************************************************************************************************
+ * 36. LISTA LOS NOMBRES, APELLIDOS Y NIF DE LOS EMPLEADOS QUE TRABAJAN EN LOS DEPARTAMENTOS 2, *
+ *                                            4 O 5                                             *
+ ************************************************************************************************/
+ SELECT nombre, apellido1, apellido2, nif FROM empleado WHERE id_departamento IN (2, 3, 4);
