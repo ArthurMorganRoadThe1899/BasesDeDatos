@@ -46,16 +46,19 @@ INSERT INTO empleado VALUES(13, '82635162B', 'Juan Antonio','Sáez', 'Guerrero',
  * 1. DEVUELVE UN LISTADO CON TODOS LOS EMPLEADOS QUE TIENE EL DEPARTAMENTO DE *
  *                     SISTEMAS. (SIN UTILIZAR INNER JOIN)                     *
  *******************************************************************************/
+ SELECT nombre, apellido1, apellido2, id_departamento FROM empleado WHERE id_departamento = (SELECT id FROM departamento WHERE nombre LIKE 'Sistemas');
 
 /**********************************************************************************
  * 2. DEVUELVE EL NOMBRE DEL DEPARTAMENTO CON MAYOR PRESUPUESTO Y LA CANTIDAD QUE *
- *                                 TIENE ASIGNADA                                 *
+ *                                 TIENE ASIGNADA                                 * 
  **********************************************************************************/
+ SELECT nombre, presupuesto FROM departamento WHERE presupuesto = (SELECT MAX(presupuesto) FROM departamento);
 
 /**********************************************************************************
  * 3. DEVUELVE EL NOMBRE DEL DEPARTAMENTO CON MENOR PRESUPUESTO Y LA CANTIDAD QUE *
  *                                 TIENE ASIGNADA                                 *
  **********************************************************************************/
+ SELECT nombre, presupuesto FROM departamento WHERE presupuesto = (SELECT MIN(presupuesto) FROM departamento);
 
 /**********************************************************************************
  * 4. DEVUELVE EL NOMBRE DEL DEPARTAMENTO CON MAYOR PRESUPUESTO Y LA CANTIDAD QUE *
@@ -101,8 +104,10 @@ INSERT INTO empleado VALUES(13, '82635162B', 'Juan Antonio','Sáez', 'Guerrero',
  * 10. DEVUELVE LOS NOMBRES DE LOS DEPARTAMENTOS QUE TIENEN EMPLEADOS ASOCIADOS. *
  *                       (UTILIZANDO EXISTS O NOT EXISTS)                        *
  *********************************************************************************/
+ SELECT nombre FROM departamento WHERE EXISTS (SELECT id_departamento FROM empleado WHERE empleado.id_departamento = departamento.id);
 
 /*********************************************************************************
  * 11. DEVUELVE LOS NOMBRES DE LOS DEPARTAMENTOS QUE TIENEN EMPLEADOS ASOCIADOS. *
  *                       (UTILIZANDO EXISTS O NOT EXISTS)                        *
  *********************************************************************************/
+ SELECT nombre FROM departamento WHERE NOT EXISTS (SELECT id_departamento FROM empleado WHERE empleado.id_departamento = departamento.id);
