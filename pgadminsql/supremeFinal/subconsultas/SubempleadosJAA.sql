@@ -61,31 +61,41 @@ INSERT INTO empleado VALUES(13, '82635162B', 'Juan Antonio','Sáez', 'Guerrero',
  * 4. DEVUELVE EL NOMBRE DEL DEPARTAMENTO CON MAYOR PRESUPUESTO Y LA CANTIDAD QUE *
  *            TIENE ASIGNADA. SIN HACER USO DE MAX, ORDER BY NI LIMIT             *
  **********************************************************************************/
+ SELECT nombre, presupuesto FROM departamento WHERE presupuesto IN (SELECT presupuesto FROM departamento WHERE presupuesto NOT IN (SELECT goroMajima.presupuesto FROM departamento AS kiryuKazama, departamento AS goroMajima WHERE kiryuKazama.presupuesto > goroMajima.presupuesto));
+ /*Esto es una mrda random que encontre por ahí, es jodidamente ineficiente, pero funciona xd, básicamente agarro, creo en una subconsulta dos copias de presupueto, y me pongo a compararlas hasta que llegan al máximo valor o menor de una de las dos, almenos eso he entendido, por lo visto la cosa esta se le llama autojoin, selfjoin o algo así*/
+ /*Seré sincero, estuve buscando un par de horas, pero acabe recurriendo a lo del chat, y aún así me ha llevado rato entender*/
+ /*Siento lo de los nombres raros, estaba probando a poner cosas raras para entender el funcionamiento XD*/
+ /*PD: Me imagino que no leeras esto, pero si puedo, en clase quiero mirar esto contigo, por saber si hay otra respuesta xD*/
 
 /**********************************************************************************
  * 5. DEVUELVE EL NOMBRE DEL DEPARTAMENTO CON MENOR PRESUPUESTO Y LA CANTIDAD QUE *
  *            TIENE ASIGNADA. SIN HACER USO DE MIN, ORDER BY NI LIMIT             *
  **********************************************************************************/
+ SELECT nombre, presupuesto FROM departamento WHERE presupuesto IN (SELECT presupuesto FROM departamento WHERE presupuesto NOT IN (SELECT goroMajima.presupuesto FROM departamento AS kiryuKazama, departamento AS goroMajima WHERE kiryuKazama.presupuesto < goroMajima.presupuesto));
 
 /********************************************************************************
  * 6. DEVUELVE LOS NOMBRES DE LOS DEPARTAMENTOS QUE TIENEN EMPLEADOS ASOCIADOS. *
  *                            (UTILIZANDO ALL O ANY)                            *
  ********************************************************************************/
+ SELECT nombre FROM departamento WHERE id = ANY (SELECT id_departamento FROM empleado WHERE id_departamento IS NOT NULL); 
 
 /***********************************************************************************
  * 7. DEVUELVE LOS NOMBRES DE LOS DEPARTAMENTOS QUE NO TIENEN EMPLEADOS ASOCIADOS. *
  *                             (UTILIZANDO ALL O ANY)                              *
  ***********************************************************************************/
+ SELECT nombre FROM departamento WHERE id != ALL (SELECT id_departamento FROM empleado WHERE id_departamento IS NOT NULL);
 
 /********************************************************************************
  * 8. DEVUELVE LOS NOMBRES DE LOS DEPARTAMENTOS QUE TIENEN EMPLEADOS ASOCIADOS. *
  *                           (UTILIZANDO IN O NOT IN)                           *
  ********************************************************************************/
+ SELECT nombre FROM departamento WHERE id IN (SELECT id_departamento FROM empleado WHERE id_departamento IS NOT NULL);
 
 /***********************************************************************************
  * 9. DEVUELVE LOS NOMBRES DE LOS DEPARTAMENTOS QUE NO TIENEN EMPLEADOS ASOCIADOS. *
  *                            (UTILIZANDO IN O NOT IN)                             *
  ***********************************************************************************/
+ SELECT nombre FROM departamento WHERE id NOT IN (SELECT id_departamento FROM empleado WHERE id_departamento IS NOT NULL);
 
 /*********************************************************************************
  * 10. DEVUELVE LOS NOMBRES DE LOS DEPARTAMENTOS QUE TIENEN EMPLEADOS ASOCIADOS. *
