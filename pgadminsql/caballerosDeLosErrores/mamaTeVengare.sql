@@ -107,62 +107,82 @@ VALUES
 /**********************************************************
  * 1. CONSULTA EL NOMBRE Y LA CATEGORÍA DE CADA CABALLERO *
  **********************************************************/
+ SELECT Caballeros.nombre, Categorias.nombre AS "Categoria" FROM Caballeros INNER JOIN Categorias ON Caballeros.categoria_id = Categorias.id_categoria;
 
 /*************************************************************************
  * 2. CONSULTA EL NOMBRE DE CADA CABALLERO Y TODAS LAS TÉCNICAS QUE SABE *
  *************************************************************************/
+ SELECT Caballeros.nombre AS "Caballeros", Tecnicas.nombre AS "Tecnicas" FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id);
 
 /******************************************************************************
  * 3. CONSULTA EL NOMBRE DE CADA TÉCNICA Y EL NOMBRE DEL CABALLERO QUE LA USA *
  ******************************************************************************/
+ SELECT Tecnicas.nombre AS "Tecnicas", Caballeros.nombre AS "Caballeros" FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id);
+ /*Este lo entendí como lo mismo, seré sincero XD*/
 
 /***************************************************************************************
  * 4. CONSULTA EL NOMBRE DE CADA CABALLERO, EL NOMBRE DE SU CATEGORÍA Y LA CANTIDAD DE *
  *                                  TÉCNICAS QUE SABE                                  *
  ***************************************************************************************/
+ SELECT DISTINCT Caballeros.nombre, Categorias.nombre AS "Categoria", COUNT(Tecnicas.nombre) FROM (((Caballeros INNER JOIN Categorias ON Caballeros.categoria_id = Categorias.id_categoria) INNER JOIN Caballero_Tecnica ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id) INNER JOIN Tecnicas ON Caballero_Tecnica.tecnica_id = Tecnicas.id_tecnica) GROUP BY Caballeros.nombre, Categorias.nombre ORDER BY Caballeros.nombre ASC;
+ /*Acá no salen los caballeros del 11 al 15 porq no tienen técnica, nota para acordarme de arreglar eso y que se vean también del 11 al 15*/
 
 /*********************************************************************************************
  * 5. CONSULTA EL NOMBRE Y LA CATEGORÍA DE LOS CABALLEROS QUE HAN REALIZADO LA TÉCNICA POLVO *
  *                                       DE DIAMANTES                                        *
  *********************************************************************************************/
+ SELECT DISTINCT Caballeros.nombre, Categorias.nombre AS "Categoria" FROM (((Caballeros INNER JOIN Categorias ON Caballeros.categoria_id = Categorias.id_categoria) INNER JOIN Caballero_Tecnica ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id) INNER JOIN Tecnicas ON Caballero_Tecnica.tecnica_id = Tecnicas.id_tecnica) WHERE Tecnicas.nombre LIKE 'Polvo de Diamantes';
 
 /*********************************************************************************
  * 6. CONSULTA EL NOMBRE Y LA ARMADURA DE LOS CABALLEROS NACIDOS DESPUÉS DE 1980 *
  *********************************************************************************/
+ SELECT nombre, armadura FROM Caballeros WHERE fecha_nacimiento > '1980-1-1';
 
 /************************************************************************
  * 7. CONSULTA EL NOMBRE DE TODOS LOS CABALLEROS JUNTO CON SU CATEGORÍA *
  ************************************************************************/
+ SELECT Caballeros.nombre, Categorias.nombre AS "Categoria" FROM Caballeros INNER JOIN Categorias ON Caballeros.categoria_id = Categorias.id_categoria;
+ /*Esto es lo mismo del ejercicio 1...?*/
 
 /*******************************************************************************
  * 8. CONSULTA EL NOMBRE DE TODAS LAS TÉCNICAS QUE CONOCE EL CABALLERO "SEIYA" *
  *******************************************************************************/
+ SELECT Tecnicas.nombre AS "Tecnicas" FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id) WHERE Caballeros.nombre LIKE 'Seiya';
 
 /******************************************************************************
  * 9. CONSULTA EL NOMBRE DE TODAS LAS TÉCNICAS QUE CONOCE EL CABALLERO "SHUN" *
  ******************************************************************************/
+ SELECT Tecnicas.nombre AS "Tecnicas" FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id) WHERE Caballeros.nombre LIKE 'Shun';
 
 /*************************************************************************************
  * 10. CONSULTA EL NOMBRE DE TODOS LOS CABALLEROS QUE CONOCEN LA TÉCNICA METEOROS DE *
  *                                      PEGASO                                       *
  *************************************************************************************/
+ SELECT Caballeros.nombre AS "Caballeros" FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id) WHERE Tecnicas.nombre LIKE 'Meteoros de Pegaso';
 
 /**************************************************************************************
  * 11. CONSULTA EL NOMBRE DE TODOS LOS CABALLEROS JUNTO CON EL NOMBRE DE SUS TÉCNICAS *
  **************************************************************************************/
+ SELECT Caballeros.nombre AS "Caballeros", Tecnicas.nombre AS "Tecnicas" FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id);
+ /*Seré sincero, este lo entendí como lo mismo que el ejercicio 2 XD*/
 
 /***************************************************************************************
  * 12. SELECCIONA LOS NOMBRES DE LOS CABALLEROS QUE HAN UTILIZADO AL MENOS UNA TÉCNICA *
  ***************************************************************************************/
+ SELECT DISTINCT Caballeros.nombre AS "Caballeros" FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id);
 
 /*****************************************************************************************
  * 13. SELECCIONA LOS NOMBRES DE LOS CABALLEROS QUE HAN UTILIZADO AL MENOS UNA TÉCNICA Y *
  *                               QUE PESAN MÁS DE 70 KILOS                               *
  *****************************************************************************************/
+ SELECT DISTINCT Caballeros.nombre AS "Caballeros", Caballeros.peso FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id) WHERE peso > 70;
+
 
 /*************************************************************************
  * 14. CONSULTA EL NOMBRE DE LA TÉCNICA MÁS UTILIZADA POR LOS CABALLEROS *
  *************************************************************************/
+ SELECT DISTINCT Tecnicas.nombre AS "Tecnicas", COUNT(Tecnicas.nombre) AS "Gente que conoce la tecnica" FROM ((Tecnicas INNER JOIN Caballero_Tecnica ON Tecnicas.id_tecnica = Caballero_Tecnica.tecnica_id) INNER JOIN Caballeros ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id) GROUP BY Tecnicas.nombre ORDER BY "Gente que conoce la tecnica" DESC;
+ /*Gente que conoce la técnica? xD*/
 
 /**********************************************************************************
  * 15. SELECCIONA LOS NOMBRES DE LOS CABALLEROS QUE HAN UTILIZADO EXACTAMENTE DOS *
