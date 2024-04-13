@@ -203,11 +203,37 @@ VALUES
  * 16. SELECCIONA LOS NOMBRES DE LAS TÉCNICAS QUE HAN SIDO UTILIZADAS POR AL MENOS DOS *
  *                                     CABALLEROS                                      *
  ***************************************************************************************/
+ SELECT tecnica_id FROM Caballero_Tecnica GROUP BY tecnica_id HAVING COUNT(caballero_id) >= 2 ORDER BY tecnica_id;
+ SELECT DISTINCT Tecnicas.nombre 
+ FROM Tecnicas 
+ INNER JOIN Caballero_Tecnica 
+ ON Caballero_Tecnica.tecnica_id = Tecnicas.id_tecnica 
+ WHERE Caballero_Tecnica.tecnica_id 
+ IN (SELECT tecnica_id 
+	FROM Caballero_Tecnica 
+	GROUP BY tecnica_id 
+	HAVING COUNT(caballero_id) >= 2 
+	ORDER BY tecnica_id);
 
 /**********************************************************************************
  * 17. SELECCIONAR LOS CABALLEROS DE CATEGORÍA ORO QUE TENGAN AL MENOS 3 TÉCNICAS *
  **********************************************************************************/
+ SELECT DISTINCT Caballeros.nombre 
+ FROM Caballeros 
+ INNER JOIN Caballero_Tecnica 
+ ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id
+ WHERE Caballero_Tecnica.caballero_id 
+ IN (SELECT caballero_id 
+	FROM Caballero_Tecnica 
+	GROUP BY caballero_id 
+	HAVING COUNT(tecnica_id) >= 3);
 
 /*************************************************************************
  * 18. SELECCIONAR LAS CATEGORÍAS QUE TIENEN UN PESO PROMEDIO MAYOR A 80 *
  *************************************************************************/
+ SELECT DISTINCT Categorias.nombre AS "Categoria", AVG(Caballeros.peso) AS "Peso promedio"
+ FROM Caballeros
+ INNER JOIN Categorias
+ ON Caballeros.categoria_id = Categorias.id_categoria
+ GROUP BY Categorias.nombre
+ HAVING AVG(Caballeros.peso) > 80;
