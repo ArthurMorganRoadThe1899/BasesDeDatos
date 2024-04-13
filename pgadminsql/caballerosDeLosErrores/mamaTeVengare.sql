@@ -188,6 +188,16 @@ VALUES
  * 15. SELECCIONA LOS NOMBRES DE LOS CABALLEROS QUE HAN UTILIZADO EXACTAMENTE DOS *
  *                                    TÉCNICAS                                    *
  **********************************************************************************/
+ SELECT DISTINCT nombre 
+ FROM Caballeros 
+ INNER JOIN Caballero_Tecnica 
+ ON Caballeros.id_caballero = Caballero_Tecnica.caballero_id 
+ WHERE Caballero_Tecnica.caballero_id = 
+ (SELECT Caballero_Tecnica.caballero_id 
+ FROM Caballero_Tecnica 
+ GROUP BY Caballero_Tecnica.caballero_id 
+ HAVING COUNT(Caballero_Tecnica.tecnica_id) = 2 
+ ORDER BY Caballero_Tecnica.caballero_id);
 
 /***************************************************************************************
  * 16. SELECCIONA LOS NOMBRES DE LAS TÉCNICAS QUE HAN SIDO UTILIZADAS POR AL MENOS DOS *
