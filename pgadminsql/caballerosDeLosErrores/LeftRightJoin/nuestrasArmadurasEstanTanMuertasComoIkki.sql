@@ -108,11 +108,30 @@ VALUES
  * 1. MOSTRAR EL NOMBRE Y LA CATEGORÍA DE TODOS LOS CABALLEROS, INCLUSO AQUELLOS QUE NO TIENEN UNA *
  *                                       CATEGORÍA ASIGNADA                                        *
  ***************************************************************************************************/
+ SELECT Caballeros.nombre, Categorias.nombre AS "categoria"
+ FROM Caballeros 
+ INNER JOIN Categorias 
+ ON Caballeros.categoria_id = Categorias.id_categoria;
 
 /***********************************************************************************************
  * 2. MOSTRAR EL NOMBRE Y LAS TÉCNICAS DE TODOS LOS CABALLEROS, INCLUSO AQUELLOS QUE NO TIENEN *
  *                                     TÉCNICAS ASIGNADAS                                      *
  ***********************************************************************************************/
+ SELECT DISTINCT cab.nombre, tec.nombre AS "tecnica"
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ LEFT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica;
+
+ /*Esta solución me gusta un pelin más, se ve más bonita, pero no muestra las técnicas XD*/
+ SELECT DISTINCT cab.nombre, COUNT(tec.nombre) AS "tecnica"
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ LEFT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ GROUP BY cab.nombre;
 
 /***********************************************************************************************
  * 3. MOSTRAR EL NOMBRE Y LA CATEGORÍA DE TODAS LAS CATEGORÍAS, INCLUSO AQUELLAS QUE NO TIENEN *
