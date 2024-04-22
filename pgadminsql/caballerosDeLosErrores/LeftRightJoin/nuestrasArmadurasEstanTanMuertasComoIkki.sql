@@ -137,21 +137,47 @@ VALUES
  * 3. MOSTRAR EL NOMBRE Y LA CATEGORÍA DE TODAS LAS CATEGORÍAS, INCLUSO AQUELLAS QUE NO TIENEN *
  *                                    CABALLEROS ASIGNADOS                                     *
  ***********************************************************************************************/
+ SELECT Caballeros.nombre, Categorias.nombre AS "categoria"
+ FROM Caballeros 
+ LEFT JOIN Categorias 
+ ON Caballeros.categoria_id = Categorias.id_categoria;
 
 /***************************************************************************
  * 4. MOSTAR TODOS LOS CABALLEROS QUE NO TIENEN TÉCNICAS ASOCIADAS A ELLOS *
  ***************************************************************************/
+ SELECT DISTINCT cab.nombre
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ LEFT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ GROUP BY cab.nombre
+ HAVING COUNT(tec.nombre) = 0;
 
 /*************************************************************************************************
  * 5. MOSTAR TODAS LAS TÉCNICAS QUE TIENEN LA PALABRA "DE" EN SU NOMBRE Y LAS CABALLEROS QUE LAS *
  *                                            TIENEN                                             *
  *************************************************************************************************/
+ SELECT cab.nombre, tec.nombre
+ FROM Tecnicas tec
+ LEFT JOIN Caballero_tecnica CT
+ ON tec.id_tecnica = CT.tecnica_id
+ LEFT JOIN Caballeros cab
+ ON cab.id_caballero = CT.caballero_id
+ WHERE tec.nombre LIKE '% de %';
 
 /*************************************************************************************************
  * 6. MOSTAR TODAS LAS TÉCNICAS Y TODOS LOS CABALLEROS QUE NACIERON DESPUÉS DE 1980 O CUYA FECHA *
  *  DE NACIMIENTO ES DESCONOCIDA. SI UN CABALLERO NO TIENE TÉCNICAS ASOCIADAS, SE MOSTRARÁ NULL  *
  *                                 EN LUGAR DEL ID DE LA TÉCNICA                                 *
  *************************************************************************************************/
+ SELECT cab.nombre, tec.nombre
+ FROM Tecnicas tec
+ LEFT JOIN Caballero_tecnica CT
+ ON tec.id_tecnica = CT.tecnica_id
+ RIGHT JOIN Caballeros cab
+ ON cab.id_caballero = CT.caballero_id
+ WHERE cab.fecha_nacimiento > '1980-1-1';
 
 /*************************************************************************************************
  * 7. MOSTAR TODOS LOS CABALLEROS, INCLUSO AQUELLOS QUE NO TIENEN TÉCNICAS, JUNTO CON EL ID Y EL *
@@ -161,6 +187,9 @@ VALUES
 /************************************************************************************
  * 8. MOSTRAR TODOS LOS CABALLEROS QUE NO TIENEN UNA FECHA DE NACIMIENTO REGISTRADA *
  ************************************************************************************/
+ SELECT nombre 
+ FROM Caballeros
+ WHERE fecha_nacimiento IS NULL;
 
 /****************************************************************
  * 9. MOSTRAR TODAS LAS TÉCNICAS QUE NO CONOCE NINGÚN CABALLERO *
