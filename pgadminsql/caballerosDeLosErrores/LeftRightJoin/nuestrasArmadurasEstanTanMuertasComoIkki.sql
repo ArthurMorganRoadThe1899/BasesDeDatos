@@ -124,15 +124,6 @@ VALUES
  LEFT JOIN Tecnicas tec
  ON CT.tecnica_id = tec.id_tecnica;
 
- /*Esta solución me gusta un pelin más, se ve más bonita, pero no muestra las técnicas XD*/
- SELECT DISTINCT cab.nombre, COUNT(tec.nombre) AS "tecnica"
- FROM Caballeros cab
- LEFT JOIN Caballero_tecnica CT
- ON cab.id_caballero = CT.caballero_id 
- LEFT JOIN Tecnicas tec
- ON CT.tecnica_id = tec.id_tecnica
- GROUP BY cab.nombre;
-
 /***********************************************************************************************
  * 3. MOSTRAR EL NOMBRE Y LA CATEGORÍA DE TODAS LAS CATEGORÍAS, INCLUSO AQUELLAS QUE NO TIENEN *
  *                                    CABALLEROS ASIGNADOS                                     *
@@ -183,6 +174,13 @@ VALUES
  * 7. MOSTAR TODOS LOS CABALLEROS, INCLUSO AQUELLOS QUE NO TIENEN TÉCNICAS, JUNTO CON EL ID Y EL *
  *      NOMBRE DE LAS TÉCNICAS, INCLUSO AQUELLAS QUE NO ESTÁN ASOCIADAS A NINGÚN CABALLERO       *
  *************************************************************************************************/
+ SELECT DISTINCT cab.nombre, tec.nombre AS "tecnica", tec.id_tecnica
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ RIGHT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ ORDER BY cab.nombre ASC;
 
 /************************************************************************************
  * 8. MOSTRAR TODOS LOS CABALLEROS QUE NO TIENEN UNA FECHA DE NACIMIENTO REGISTRADA *
@@ -194,46 +192,118 @@ VALUES
 /****************************************************************
  * 9. MOSTRAR TODAS LAS TÉCNICAS QUE NO CONOCE NINGÚN CABALLERO *
  ****************************************************************/
+ SELECT DISTINCT tec.nombre
+ FROM Tecnicas tec
+ LEFT JOIN Caballero_tecnica CT
+ ON tec.id_tecnica = CT.tecnica_id
+ WHERE tec.id_tecnica NOT IN (SELECT tecnica_id FROM Caballero_tecnica);
 
 /**************************************************************************
  * 10. MOSTRAR TODOS LOS CABALLEROS QUE NO TIENEN UNA ARMADURA REGISTRADA *
  **************************************************************************/
+ SELECT nombre, armadura
+ FROM Caballeros
+ WHERE armadura IS NULL;
 
 /***********************************************************************************************
  * 11. MOSTAR EL NOMBRE DE CADA CABALLERO Y SU ARMADURA, INCLUSO SI NO TIENE ARMADURA ASIGNADA *
  ***********************************************************************************************/
+ SELECT nombre, armadura
+ FROM Caballeros;
 
 /*****************************************************************************************************
  * 12. MOSTAR EL NOMBRE DE CADA TÉCNICA Y EL NOMBRE DE LOS CABALLEROS QUE LA UTILIZAN, INCLUSO SI NO *
  *                              HAY CABALLEROS QUE UTILICEN ESA TÉCNICA                              *
  *****************************************************************************************************/
+ SELECT DISTINCT cab.nombre, tec.nombre AS "tecnica", tec.id_tecnica
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ RIGHT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ ORDER BY cab.nombre ASC;
 
 /*******************************************************************************************
  * 13. CONSULTA QUE MUESTRA EL NOMBRE DE CADA CABALLERO Y SU CATEGORÍA ASOCIADA, INCLUIDOS *
  *                AQUELLOS CABALLEROS QUE NO TIENEN UNA CATEGORÍA ASIGNADA                 *
  *******************************************************************************************/
+ SELECT cab.nombre, cat.nombre
+ FROM Caballeros cab
+ LEFT JOIN Categorias cat
+ ON cab.categoria_id = cat.id_categoria;
 
 /**********************************************************************************
  * 14. MOSTRAR EL NOMBRE DE LAS TÉCNICAS QUE NO HA APRENDIDO EL CABALLERO "SEIYA" *
  **********************************************************************************/
+ SELECT DISTINCT tec.nombre AS "tecnica"
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ RIGHT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ WHERE tec.nombre NOT IN (SELECT DISTINCT tec.nombre
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ RIGHT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ WHERE cab.nombre = 'Seiya');
+
+ /*
+    ! Estas cuatro técnicas no han de salir:
+        * Colera del dragón
+        * Meteoros de pegaso
+        * Ondas del infierno
+        * Polvo de diamantes
+ */
 
 /*************************************************************************************************
  * 15. MOSTRAR EL NÚMERO DE TÉCNICAS QUE HA APRENDIDO CADA CABALLERO, INCLUYENDO AQUELLOS QUE NO *
  *                                 HAN APRENDIDO NINGUNA TÉCNICA                                 *
  *************************************************************************************************/
+ SELECT DISTINCT cab.nombre, COUNT(tec.nombre) AS "tecnica"
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ LEFT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ GROUP BY cab.nombre
+ ORDER BY COUNT(tec.nombre) ASC;
 
 /*************************************************************************
  * 16. MOSTRAR LA CANTIDAD DE CABALLEROS QUE PERTENECEN A CADA CATEGORÍA *
  *************************************************************************/
+ SELECT cat.nombre AS categoria, COUNT(cab.nombre) AS nCaballeros
+ FROM Caballeros cab
+ LEFT JOIN Categorias cat
+ ON cab.categoria_id = cat.id_categoria
+ GROUP BY cat.nombre;
 
 /***************************************************************************************************
  * 17. SELECCIONAR EL NOMBRE Y LA CANTIDAD DE TÉCNICAS DE LOS CABALLEROS ORDENADOS POR CANTIDAD DE *
  *                                   TÉCNICAS DE MAYOR A MENOR.                                    *
  *                                   PISTA. UTILIZA EL GROUP BY                                    *
  ***************************************************************************************************/
+ SELECT DISTINCT cab.nombre, COUNT(tec.nombre) AS "tecnica"
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ LEFT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ GROUP BY cab.nombre
+ ORDER BY COUNT(tec.nombre) ASC;
 
 /*********************************************************************************************
  * 18. SELECCIONAR EL NOMBRE Y LA CANTIDAD DE TÉCNICAS DE LOS CABALLEROS QUE TIENEN MÁS DE 3 *
  *                                         TÉCNICAS.                                         *
  *                                   PISTA. UTILIZA HAVING                                   *
  *********************************************************************************************/
+ SELECT DISTINCT cab.nombre, COUNT(tec.nombre) AS "tecnica"
+ FROM Caballeros cab
+ LEFT JOIN Caballero_tecnica CT
+ ON cab.id_caballero = CT.caballero_id 
+ LEFT JOIN Tecnicas tec
+ ON CT.tecnica_id = tec.id_tecnica
+ GROUP BY cab.nombre
+ HAVING COUNT(tec.nombre) > 3
+ ORDER BY COUNT(tec.nombre) ASC;
