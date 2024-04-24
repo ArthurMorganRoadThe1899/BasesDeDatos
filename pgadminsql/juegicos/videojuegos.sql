@@ -169,6 +169,8 @@ VALUES
 /**************************************************************************************
  * 1. ENCONTRAR LOS NOMBRES DE LAS PLATAFORMAS CUYO FABRICANTE ES 'NINTENDO' O 'SONY' *
  **************************************************************************************/
+ SELECT nombre, fabricante FROM plataforma
+ WHERE fabricante = 'Nintendo' OR fabricante = 'Sony';
 
 /*******************************************************************************
  * 2. OBTENER LOS NOMBRES DE LOS GÉNEROS QUE TIENEN AL MENOS UN JUEGO ASOCIADO *
