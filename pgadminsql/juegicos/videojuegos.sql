@@ -175,10 +175,23 @@ VALUES
 /*******************************************************************************
  * 2. OBTENER LOS NOMBRES DE LOS GÉNEROS QUE TIENEN AL MENOS UN JUEGO ASOCIADO *
  *******************************************************************************/
+ SELECT DISTINCT gen.nombre
+ FROM genero gen
+ LEFT JOIN juego jue
+ ON jue.genero_id = gen.id_genero
+ GROUP BY gen.id_genero
+ HAVING COUNT(gen.id_genero) > 1;
 
 /****************************************************************************************
  * 3. OBTENER LOS NOMBRES DE TODOS LOS USUARIOS QUE NO HAN COMENTADO SOBRE NINGÚN JUEGO *
  ****************************************************************************************/
+ SELECT DISTINCT use.nombre
+ FROM usuario use
+ LEFT JOIN comentario com
+ ON id_usuario = usuario_id
+ WHERE id_usuario NOT IN (SELECT usuario_id 
+						              FROM comentario);
+
 
 /*********************************************************************
  * 4. OBTENER LOS NOMBRES DE LOS JUEGOS QUE HAN RECIBIDO COMENTARIOS *
