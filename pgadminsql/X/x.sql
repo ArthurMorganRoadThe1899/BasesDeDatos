@@ -50,15 +50,38 @@ INSERT INTO seguidor (id_usr, id_follower) VALUES
  * 1. ACTUALIZA EL CORREO ELECTRÓNICO DEL USUARIO CON JUAN A JUAN@YA.COM. SI LOS DATOS ESTÁN *
  *                           CORRECTOS, CONFIRMAR LA TRANSACCIÓN.                            *
  *********************************************************************************************/
+BEGIN;
+ UPDATE usuario SET email = 'juan@ya.com'
+ WHERE nombre = 'juan';
+ ROLLBACK;
+COMMIT;
 
 /************************************************************************************************
  * 2. CREAR DOS USUARIOS NUEVOS , AÑADE PUNTO DE SALVADO, BORRAR UNA DE LAS FILAS CREADAS Y HAZ *
  *                          ROLLBACK PARA VOLVER AL PUNTO DE SALVADO.                           *
  ************************************************************************************************/
+BEGIN;
+ INSERT INTO usuario (nombre, email, fecha_nacimiento) VALUES
+                    ('ester', 'ester@drive.com', '1981-02-04'),
+                    ('jaume', 'jaume@arago.valls', '1981-02-05');
+ SAVEPOINT savestate;
+
+ DELETE FROM usuario
+ WHERE nombre = 'ester';
+
+ ROLLBACK TO savestate;
+COMMIT;
 
 /*****************************************************************************************
  * 3. INSERTAR VARIAS FILAS EN UNA TABLA Y DESHACER LA TRANSACCIÓN COMPLETA CON ROLLBACK *
  *****************************************************************************************/
+BEGIN;
+ SAVEPOINT savestate;
+ INSERT INTO usuario (nombre, email, fecha_nacimiento) VALUES
+                    ('alberto', 'alberto@outlook.com', '1981-02-06'),
+                    ('juan', 'juanjosetiscarmoya@outlook.com', '1990-02-06');
+ ROLLBACK TO savestate;
+COMMIT;
 
 /*****************************************************************************
  * 4. ELIMINAR UNA FILA DE UNA TABLA Y DESHACER LA ELIMINACIÓN CON ROLLBACK: *
