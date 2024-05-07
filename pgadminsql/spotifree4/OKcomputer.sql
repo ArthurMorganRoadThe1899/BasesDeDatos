@@ -42,7 +42,8 @@ VALUES
     (3, 'Pedro', 'pedro@hotmail.com'),
     (4, 'Misterio', NULL),
     (5, 'Joan', 'joan@gmail.com'),
-    (6, 'Mar', 'mar@yahoo.com');
+    (6, 'Mar', 'mar@yahoo.com'),
+    (7, 'Carles', 'g.gonzalezmontes@edu.gva.es');
 
  
 INSERT INTO listaReproduccion (id_Lista, id_Usuario, titulo)
@@ -116,67 +117,135 @@ VALUES
     (21, NULL, 'La marimorena de Pepe', 14);
 
 
-/****************************************************************************************
- * 1. ¿CUÁNTAS CANCIONES EN LA TABLA "CANCION" TIENEN UNA DURACIÓN ENTRE 3 Y 4 MINUTOS? *
- ****************************************************************************************/
+/***************************************************************
+ * 1. MOSTRAR EL NÚMERO DE ÁLBUMES PUBLICADOS POR CADA ARTISTA *
+ ***************************************************************/
+ SELECT nombre, COUNT(titulo) as albumes
+ FROM artista art
+ LEFT JOIN album alb
+ ON art.id_Artista = alb.id_Artista
+ GROUP BY nombre;
 
-/***************************************************************************************
- * 2. ¿CUÁNTOS ÁLBUMES EN LA TABLA "ALBUM" FUERON LANZADOS ENTRE LOS AÑOS 2010 Y 2020? *
- ***************************************************************************************/
+/***************************************************************
+ * 2. MOSTRAR LA DURACIÓN TOTAL DE LAS CANCIONES DE CADA ÁLBUM *
+ ***************************************************************/
+ SELECT alb.titulo, SUM(duracion) as "duración"
+ FROM album alb
+ JOIN cancion can
+ ON alb.id_Album = can.id_Album
+ GROUP BY alb.titulo;
 
-/**************************************************************************************************
- * 3. ¿CUÁNTAS LISTAS DE REPRODUCCIÓN EN LA TABLA "LISTAREPRODUCCION" FUERON CREADAS POR USUARIOS *
- *                                 CON UN ID_USUARIO ENTRE 1 Y 3?                                 *
- **************************************************************************************************/
+/*****************************************************************************
+ * 3. MOSTRAR LA CANTIDAD DE LISTAS DE REPRODUCCIÓN CREADAS POR CADA USUARIO *
+ *****************************************************************************/
+ SELECT nombre, COUNT(lr.id_Usuario) as "Listas creadas"
+ FROM usuario use
+ LEFT JOIN listaReproduccion lr
+ ON use.id_Usuario = lr.id_Usuario
+ GROUP BY nombre;
 
-/**********************************************************************************
- * 4. ¿CUÁNTOS ARTISTAS EN LA TABLA "ARTISTA" TIENEN UN "ID_ARTISTA" ENTRE 1 Y 5? *
- **********************************************************************************/
+/****************************************************
+ * 4. OBTENER EL NÚMERO DE CANCIONES POR CADA ÁLBUM *
+ *                 (CON UNA VISTA)                  *
+ ****************************************************/
+ CREATE VIEW cancionesXalbum AS
+ SELECT alb.titulo, COUNT(id_Cancion) as "Número de canciones"
+ FROM album alb
+ LEFT JOIN cancion can
+ ON alb.id_Album = can.id_Album
+ GROUP BY alb.titulo;
+ 
+ SELECT * FROM cancionesxalbum;
 
-/************************************************************************************
- * 5. ¿CUÁNTOS ÁLBUMES EN LA TABLA "ALBUM" FUERON LANZADOS EN LOS AÑOS 2000 Y 2020? *
- ************************************************************************************/
 
-/****************************************************************************************************
- * 6. ¿CUÁNTAS LISTAS DE REPRODUCCIÓN EN LA TABLA "LISTAREPRODUCCION" FUERON CREADAS POR EL USUARIO *
- *                                   CON "ID_USUARIO" IGUAL A 4?                                    *
- ****************************************************************************************************/
+/******************************************************
+ * 5. OBTENER EL NÚMERO DE CANCIONES POR CADA ARTISTA *
+ ******************************************************/
+ SELECT DISTINCT nombre, COUNT(can.id_Cancion) as "número de canciones"
+ FROM artista art
+ LEFT JOIN album alb
+ ON art.id_Artista = alb.id_Artista
+ JOIN cancion can
+ ON alb.id_Album = can.id_Album
+ GROUP BY nombre;
 
-/*********************************************************************************************
- * 7. ¿CUÁNTOS ARTISTAS EN LA TABLA "ARTISTA" TIENEN UN "ID_ARTISTA" MAYOR A 5 Y MENOR A 10? *
- *********************************************************************************************/
+/****************************************************
+ * 6. OBTENER EL NÚMERO DE ÁLBUMES POR CADA ARTISTA *
+ ****************************************************/
+  SELECT DISTINCT nombre, COUNT(alb.id_Album) as "número de albumes"
+  FROM artista art
+  LEFT JOIN album alb
+  ON art.id_Artista = alb.id_Artista
+  GROUP BY nombre;
 
-/*******************************************************************************
- * 8. ¿CUÁNTOS ÁLBUMES EN LA TABLA "ALBUM" FUERON LANZADOS ANTES DEL AÑO 2015? *
- *******************************************************************************/
+/*******************************************************
+ * 7. OBTENER LA DURACIÓN TOTAL DE CANCIONES POR ÁLBUM *
+ *******************************************************/
+  SELECT can.titulo as "nombre cancion", alb.titulo as "nombre album", duracion
+  FROM album alb
+  JOIN cancion can
+  ON alb.id_Album = can.id_Album
+  GROUP BY can.titulo, alb.titulo, duracion
+  ORDER BY can.titulo ASC;
 
-/*************************************************************************************************
- * 9. CONTAR EL NÚMERO DE USUARIOS QUE TIENEN UNA DIRECCIÓN DE CORREO ELECTRÓNICO VÁLIDA, PISTA: *
- *                                         UTILIZA LIKE.                                         *
- *************************************************************************************************/
+/*************************************************
+ * 8. OBTENER LA CANTIDAD DE ÁLBUMES POR ARTISTA *
+ *************************************************/
+  SELECT nombre, COUNT(titulo) as albumes
+  FROM artista art
+  LEFT JOIN album alb
+  ON art.id_Artista = alb.id_Artista
+  GROUP BY nombre;
 
-/***********************************************************
- * 10. CONTAR LA CANTIDAD DE ARTISTAS EN LA TABLA ARTISTA. *
- ***********************************************************/
-
-/**********************************************************
- * 11. CUANTAS LISTAS DE REPRODUCCIÓN TIENE EL USUARIO 1. *
- **********************************************************/
-
-/*****************************************************
- * 12. CUANTOS MINUTOS DE MUSICA TIENE EL USUARIO 1. *
- *****************************************************/
-
-/*********************************************************************************
- * 13. ENCONTRAR EL PROMEDIO DE DURACIÓN DE LAS CANCIONES EN LA TABLA "CANCION". *
- *********************************************************************************/
-
-/*******************************************************************************************************
- * 14. ENCONTRAR LA CANTIDAD TOTAL DE CANCIONES EN LA TABLA "CANCION" Y LA DURACIÓN TOTAL DE TODAS LAS *
- *                                              CANCIONES                                              *
- *******************************************************************************************************/
+/*************************************************************
+ * 9. OBTENER EL PROMEDIO DE DURACIÓN DE CANCIONES POR ÁLBUM *
+ *************************************************************/
+  SELECT alb.titulo, AVG(duracion) as "duración"
+  FROM album alb
+  JOIN cancion can
+  ON alb.id_Album = can.id_Album
+  GROUP BY alb.titulo;
 
 /***********************************************************************
- * 15. CREA UNA CONSULTA CON TODAS LAS VISTAS CREADAS EN EL EJERCICIO. *
+ * 10. OBTENER EL NÚMERO DE USUARIOS QUE TIENEN LISTAS DE REPRODUCCIÓN *
  ***********************************************************************/
- 
+ SELECT COUNT(DISTINCT lr.id_Usuario) as "usuarios con lista"
+ FROM listaReproduccion lr
+ JOIN usuario use
+ ON use.id_Usuario = lr.id_Usuario;
+
+/********************************************************************
+ * 11. OBTENER EL NÚMERO DE CANCIONES EN CADA LISTA DE REPRODUCCIÓN *
+ ********************************************************************/
+ SELECT COUNT(nombre)
+ FROM listaReproduccion lr
+ JOIN usuario use
+ ON use.id_Usuario = lr.id_Usuario;
+
+/***************************************************************
+ * 12. OBTENER EL NÚMERO DE LISTAS DE REPRODUCCIÓN POR USUARIO *
+ *                       (CON UNA VISTA)                       *
+ ***************************************************************/
+ /* Aquí dejo de usar use para para abreviar usuario y lo hago con usr, me di cuenta
+ como a mitad y me estaba poniendo nerviso XD*/
+ CREATE VIEW numeroListasXuser AS
+ SELECT nombre, COUNT(id_Lista)
+ FROM usuario usr
+ LEFT JOIN listaReproduccion lr
+ ON usr.id_Usuario = lr.id_Usuario
+ GROUP BY nombre;
+
+ SELECT * FROM numeroListasXuser;
+
+/*********************************************************************
+ * 13. CONSULTA QUE MUESTRA LA DURACIÓN TOTAL DE CANCIONES POR ÁLBUM *
+ *                          (CON UNA VISTA)                          *
+ *********************************************************************/
+ CREATE VIEW duracionCancionesXalbum AS
+ SELECT alb.titulo, SUM(duracion) as "duración"
+ FROM album alb
+ JOIN cancion can
+ ON alb.id_Album = can.id_Album
+ GROUP BY alb.titulo;
+
+ SELECT * FROM duracionCancionesXalbum;
