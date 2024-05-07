@@ -53,7 +53,6 @@ INSERT INTO seguidor (id_usr, id_follower) VALUES
 BEGIN;
  UPDATE usuario SET email = 'juan@ya.com'
  WHERE nombre = 'juan';
- ROLLBACK;
 COMMIT;
 
 /************************************************************************************************
