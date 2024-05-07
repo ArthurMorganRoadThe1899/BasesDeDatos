@@ -188,7 +188,7 @@ VALUES
  SELECT DISTINCT use.nombre
  FROM usuario use
  LEFT JOIN comentario com
- ON id_usuario = usuario_id
+ ON id_usuario = usuario_ida
  WHERE id_usuario NOT IN (SELECT usuario_id 
 						              FROM comentario);
 
