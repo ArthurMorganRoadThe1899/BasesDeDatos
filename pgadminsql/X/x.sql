@@ -80,12 +80,28 @@ BEGIN;
  INSERT INTO usuario (nombre, email, fecha_nacimiento) VALUES
                     ('alberto', 'alberto@outlook.com', '1981-02-06'),
                     ('juan', 'juanjosetiscarmoya@outlook.com', '1990-02-06');
+
+  SAVEPOINT savestateNames;
+
+ DELETE FROM usuario
+ WHERE nombre = 'alberto' AND nombre = 'juan';
+
+ ROLLBACK TO savestateNames;
+
  ROLLBACK TO savestate;
 COMMIT;
 
 /*****************************************************************************
  * 4. ELIMINAR UNA FILA DE UNA TABLA Y DESHACER LA ELIMINACIÓN CON ROLLBACK: *
  *****************************************************************************/
+BEGIN;
+ SAVEPOINT savestate;
+
+ DELETE FROM usuario
+ WHERE nombre = 'ester';
+
+ ROLLBACK TO savestate;
+COMMIT;
 
 /*************************************************************************************************
  * 5. AÑADE EL USUARIO LLET_MERENGA , INSERTAR DOS FILAS EN LA TABLA TWEETS AL USUARIO ANTERIOR, *
