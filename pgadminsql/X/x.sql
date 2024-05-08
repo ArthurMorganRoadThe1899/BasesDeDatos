@@ -107,10 +107,41 @@ COMMIT;
  * HACER UN ROLLBACK Y LUEGO INSERTA EL SIGUIENTE TWIT AL USUARIO: LLET_MERENGA , UN ANILLO PARA *
  *                                     GOBERNARLOS A TODOS.                                      *
  *************************************************************************************************/
+BEGIN;
+ INSERT INTO usuario (id, nombre, email, fecha_nacimiento) VALUES
+                    (11 ,'LLET_MERENGA', 'batileche@outlook.com', '1981-02-06');
+
+ SAVEPOINT noTweets;
+
+ INSERT INTO tweet (contenido, fecha_creacion, id_usr) VALUES
+    ('no te preocupes shaggy, en la batcueva tomaremos batileche', '2022-02-01', 11),
+    ('¿batique?', '2022-02-01', 11);
+
+ ROLLBACK TO noTweets;
+
+ INSERT INTO tweet (contenido, fecha_creacion, id_usr) VALUES
+    ('UN ANILLO PARA GOBERNARLOS A TOODOS, GOLLUM, GOLLUM', '2022-02-01', 11);
+	
+COMMIT;
 
 /********************************************
  * 6. BORRAR UN SEGUIDOR AL USUARIO ANDREI. *
  ********************************************/
+BEGIN; 
+ DELETE FROM seguidor
+ WHERE id_usr IN (SELECT id_usr
+				FROM seguidor
+				JOIN usuario
+				ON id = id_usr
+				WHERE nombre = 'andrei')
+				
+ AND id_follower IN (SELECT id_follower
+				FROM seguidor
+				JOIN usuario
+				ON id = id_follower
+				WHERE nombre = 'juan');
+COMMIT;
+
 
 
 
