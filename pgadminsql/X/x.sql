@@ -75,7 +75,7 @@ COMMIT;
  * 3. INSERTAR VARIAS FILAS EN UNA TABLA Y DESHACER LA TRANSACCIÓN COMPLETA CON ROLLBACK *
  *****************************************************************************************/
 BEGIN;
- SAVEPOINT savestate;
+
  INSERT INTO usuario (nombre, email, fecha_nacimiento) VALUES
                     ('alberto', 'alberto@outlook.com', '1981-02-06'),
                     ('juan', 'juanjosetiscarmoya@outlook.com', '1990-02-06');
@@ -87,20 +87,17 @@ BEGIN;
 
  ROLLBACK TO savestateNames;
 
- ROLLBACK TO savestate;
-COMMIT;
+ ROLLBACK;
 
 /*****************************************************************************
  * 4. ELIMINAR UNA FILA DE UNA TABLA Y DESHACER LA ELIMINACIÓN CON ROLLBACK: *
  *****************************************************************************/
 BEGIN;
- SAVEPOINT savestate;
 
  DELETE FROM usuario
  WHERE nombre = 'ester';
 
- ROLLBACK TO savestate;
-COMMIT;
+ROLLBACK-;
 
 /*************************************************************************************************
  * 5. AÑADE EL USUARIO LLET_MERENGA , INSERTAR DOS FILAS EN LA TABLA TWEETS AL USUARIO ANTERIOR, *
@@ -108,16 +105,17 @@ COMMIT;
  *                                     GOBERNARLOS A TODOS.                                      *
  *************************************************************************************************/
 BEGIN;
+
+ SAVEPOINT noTweets;
  INSERT INTO usuario (id, nombre, email, fecha_nacimiento) VALUES
                     (11 ,'LLET_MERENGA', 'batileche@outlook.com', '1981-02-06');
 
- SAVEPOINT noTweets;
 
  INSERT INTO tweet (contenido, fecha_creacion, id_usr) VALUES
     ('no te preocupes shaggy, en la batcueva tomaremos batileche', '2022-02-01', 11),
     ('¿batique?', '2022-02-01', 11);
 
- ROLLBACK TO noTweets;
+ ROLLBACK TO noTweets; /* Acá ya daría error pq no existe el usuario xd */
 
  INSERT INTO tweet (contenido, fecha_creacion, id_usr) VALUES
     ('UN ANILLO PARA GOBERNARLOS A TOODOS, GOLLUM, GOLLUM', '2022-02-01', 11);
@@ -152,12 +150,33 @@ COMMIT;
  *  CREA UN TUIT PARA ESE USUARIO EN LA TABLA "TWEETS" CON EL TEXTO: HOLA MUNDICO. LUEGO, HAZ UN   *
  *                        COMMIT PARA CONFIRMAR LA TRANSACCIÓN ES CORRECTA.                        *
  ***************************************************************************************************/
+BEGIN;
+ INSERT INTO usuario(id, nombre, email, fecha_nacimiento) VALUES
+                    (12, 'josevi', 'josevicente@latinmail.com', '1988-12-23');
+
+ INSERT INTO tweet (contenido, fecha_creacion, id_usr) VALUES
+                   ('Hola mundico, i am a true alpha gamer :eduardo:', '2022-02-05', 12);
+COMMIT;
 
 /********************************************************************************************
- *  2. INSERTA EL USUARIO FORO_COCHES , AÑADE DOS SEGUIDORES PEUGEOT Y RENAULT AL USUARIO   *
+ *  2. INSERTA EL USUARIO FORO_COCHES, AÑADE DOS SEGUIDORES PEUGEOT Y RENAULT AL USUARIO    *
  * FORO_COCHES. LUEGO, ACTUALIZA EL CORREO ELECTRÓNICO DEL USUARIO A FORO_COCHES@COCHES.NET *
  *                 POR ÚLTIMO, HAZ UN COMMIT PARA CONFIRMAR LA TRANSACCIÓN.                 *
  ********************************************************************************************/
+BEGIN;
+/*Ya se, es incremental, por pereza de mirar la db y que ids hay, les asigno un id para que la transacción vaya bien xD*/
+ INSERT INTO usuario(id, nombre, email, fecha_nacimiento) VALUES
+                    (33, 'foro_coches', NULL, '2003-08-13'),
+                    (200, 'Renault', NULL, NULL),
+                    (50, 'Pueugeot', NULL, NULL);
+
+ INSERT INTO seguidor(id_usr, id_follower) VALUES
+                     (33,200),
+                     (33,50);   
+ 
+ UPDATE usuario SET email = 'foro_coches@coches.net'
+ WHERE nombre = 'foro_coches';
+COMMIT;
 
 /*************************************************************************************
  *                   3. INSERTA DOS SEGUIDORES AL PROFESOR ANDREI.                   *
@@ -165,13 +184,35 @@ COMMIT;
  *                                    ! MENDIETA                                     *
  * HAZ UN ROLLBACK, SEGUIDAMENTE INSERTA EL SEGUIDOR VILLA Y FINALIZA CON UN COMMIT. *
  *************************************************************************************/
+BEGIN;
+ 
+ INSERT INTO usuario(id, nombre, email, fecha_nacimiento) VALUES
+                    (22, 'Kempes', NULL, NULL),
+                    (23, 'Mendieta', NULL, NULL),
+                    (24, 'Villa', NULL, NULL);
+					
+ SAVEPOINT savestate;
+ INSERT INTO seguidor(id_usr, id_follower) VALUES
+                     (2,22),
+                     (2,23);   
+
+ ROLLBACK TO savestate;
+ INSERT INTO seguidor(id_usr, id_follower) VALUES
+                     (2,24);
+COMMIT;
 
 /***********************************************************************************************
  * 4. INSERTA UN USUARIO NUEVO LLAMADO CARLES, CON EMAIL CARLES@NETSCAPE.COM, Y FECHA 1982-03- *
  *  05. SEGUIDAMENTE CREA UN SAVEPOINT. FINALMENTE CREA DOS TWEETS A DÍA 25 DE DICIEMBRE Y 31  *
  *          DE DICIEMBRE 2022. CON EL MENSAJE: FELIZ NOCHE BUEN@ Y FELIZ NOCHEVIEJA.           *
  ***********************************************************************************************/
+BEGIN;
+ INSERT INTO usuario(id, nombre, email, fecha_nacimiento) VALUES
+                    (999, 'Carles', 'carles@netscape.com', '1982-03-05');
 
-
-
- /*Para confirmar la transacción utiliza commit.*/
+ SAVEPOINT savestate;
+ 
+ INSERT INTO tweet (contenido, fecha_creacion, id_usr) VALUES
+                   ('Feliz navidad y nochebuena, os sea leve ^^', '2022-12-31', 999),
+                   ('saddfsaaffgsASADfdsaA tw', '2023-01-01', 999);
+COMMIT;
