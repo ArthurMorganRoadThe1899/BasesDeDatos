@@ -20,7 +20,8 @@ CREATE TABLE comentario(
     contenido VARCHAR(10000),
     id_vid integer,
     usr_id integer,
-        FOREIGN KEY(id_vid) REFERENCES video(id),
+        FOREIGN KEY(id_vid) REFERENCES video(id)
+        ON DELETE CASCADE,
         FOREIGN KEY(usr_id) REFERENCES usuario(id)
 );
 
@@ -68,11 +69,9 @@ Si, soy uno de los integrantes del equipo de traducción al español de este jue
  *                                     REALIZAR ESTA ACCIÓN.                                      *
  **************************************************************************************************/
  CREATE USER kiryu WITH PASSWORD 'admin123';
- GRANT SELECT, INSERT, UPDATE, DELETE ON video TO kiryu;
+ GRANT INSERT, UPDATE, DELETE ON video TO kiryu;
 
-/*Me deja hacer cosicas, pero delete no porque se me olvido poner delete cascade para los comentarios y me dice 'nao nao, no puedes cargarte esto pq en comentarios se referencía al vídeo y eso no 'ta bien'*/
-
-/*Un insert y un update me deja sin problemas */
+/*Sin problemas*/
  INSERT INTO video(id, title, description, url, usr_id) VALUES
 (11, 'Alejese señor!!!', 'ahhhhh', 'https://????????????????.com', 1);
 
@@ -80,23 +79,56 @@ Si, soy uno de los integrantes del equipo de traducción al español de este jue
  SET title = 'Let´s Play Inside ¡ALÉJATE DE MÍ!', description = 'Este sí que me ha acojonado... X´D', url = 'https://youtu.be/cQ3J2K_Xhlc'
  WHERE id = 11; 
 
+ DELETE FROM video 
+ WHERE id = 11;
+
+ /*un select nanai de la china*/
 
 /*************************************************************************************
  * 3. CONCEDE PERMISO DE LECTURA Y ESCRITURA EN LA TABLA VIDEOS DE TU USUARIO CREADO *
  *  ANTERIORMENTE. VERIFICA SI EL USUARIO TIENE PERMISOS PARA REALIZAR ESTA ACCIÓN.  *
  *************************************************************************************/
+ GRANT INSERT, UPDATE, DELETE ON video TO majima;
+
+ /*Sep, acá te dejo unos comandos para hacerlo*/
+ INSERT INTO video(id, title, description, url, usr_id) VALUES
+(12, 'placeholder', 'placeholder', 'placeholder', 2);
+
+ UPDATE video
+ SET title = 'El DESASTROSO desarrollo de Sonic 2006', description = 'El Sonic: The Hedgehog que salió en 2006, conocido popularmente como Sonic 06, se suponía que iba a celebrar el 15 aniversario del erizo, pero una serie de problemas que no podían verse venir, y unas fechas de desarrollo absolutamente inamovibles, lo condenaron a verse considerado uno de los peores juegos de la historia.', url = 'https://youtu.be/F8uBaw1TXd4'
+ WHERE id = 12; 
+
+  DELETE FROM video 
+ WHERE id = 12;
+
+ SELECT * FROM video;
+
 
 /***************************************************************************************************
  *    4. REVOCA LOS PERMISOS DE ESCRITURA DEL USUARIO QUE HAS CREADO EN EL EJERCICIO ANTERIOR Y    *
  * OTÓRGALE PERMISOS DE LECTURA EN SU LUGAR. INTENTA REALIZAR UNA INSERCIÓN EN LA TABLA "VIDEOS" Y *
  *                VERIFICA SI EL USUARIO TIENE PERMISOS PARA REALIZAR ESTA ACCIÓN.                 *
  ***************************************************************************************************/
+ REVOKE INSERT, UPDATE, DELETE ON video FROM majima;
+ /*ya tenía de antes permisos de escritura xd*/
+
+ /*SELECT bien, el resto nada*/
+ SELECT * FROM video;
+ 
 
 /*************************************************************************************************
  * 5. CREA UN NUEVO USUARIO LLAMADO "PRACTICAS" CON LA CONTRASEÑA "BECARIO" Y OTORGARLE PERMISOS *
  *   DE LECTURA EN LAS TABLAS VIDEOS Y COMENTARIOS. VERIFICA SI EL USUARIO TIENE PERMISOS PARA   *
  *                                     REALIZAR ESTA ACCIÓN.                                     *
  *************************************************************************************************/
+ CREATE USER practicas WITH PASSWORD 'becario';
+ GRANT SELECT ON video, comentario TO practicas;
+
+ /*Yes, ve bien las tablas de video y comentario: */
+
+ SELECT * FROM video;
+
+ SELECT * FROM comentario;
 
 /**************************************************************************************************
  * 6. OTORGA PERMISOS DE LECTURA EN LA TABLA "VIDEOS" A UN USUARIO Y LUEGO REVOCA LOS PERMISOS DE *
@@ -104,6 +136,18 @@ Si, soy uno de los integrantes del equipo de traducción al español de este jue
  *     SELECT EN LA TABLA "VIDEOS" Y VERIFICA SI EL USUARIO TIENE PERMISOS PARA VER EL CAMPO      *
  *                                         "DESCRIPCIÓN".                                         *
  **************************************************************************************************/
+ /*Aquí saré a Majima que el ya tiene SOLO permisos de de lectura*/
+ REVOKE SELECT ON video FROM majima;
+ GRANT SELECT ("id", "title", "url", "usr_id") ON video TO peter;
+ SELECT description FROM video;
+
+ /*También probe a directamente, hacerle un:
+ REVOKE SELECT ("description") ON video FROM majima;
+
+ Me pillaba el... ¿comando? no se exactamente como definir la acción, pero vamos, que me lo pillaba pero luego cuando iba a hacer un
+ SELECT * FROM video;
+ Le sudaba todo y miraba la tabla description XD
+ */
 
 /***********************************************************************************************
  * 7. PERMISOS DE LECTURA SOLO PARA EL CAMPO TITULO DE LA TABLA VIDEOS AL USUARIO "PRACTICAS Y *
