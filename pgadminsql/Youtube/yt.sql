@@ -60,25 +60,25 @@ Si, soy uno de los integrantes del equipo de traducción al español de este jue
  *                                             ACCIÓN.                                              *
  ****************************************************************************************************/
  CREATE USER majima WITH PASSWORD 'admin123';
- GRANT SELECT, INSERT, UPDATE, DELETE ON video TO majima;
-
- /*Si me deja hacer un par de cosas, select, update, delete no porque la cague y no puse delete cascade en comentarios, no se si iría o no...
- el que me esta dando conflicto es insert, he intentado meter esto, y me dice nai*/
-
- INSERT INTO video(title, description, url, usr_id) VALUES
-('Alejese señor!!!', 'ahhhhh', 'https://????????????????.com', 1);
-
-/*Estuve tanteando, y si me deja hacer insert, lo que pasa que me da error cuando intento crearlo sin crear yo a mano un id*/
- INSERT INTO video(id, title, description, url, usr_id) VALUES
-(11, 'Alejese señor!!!', 'ahhhhh', 'https://????????????????.com', 1);
+ GRANT SELECT ON video TO majima;
 
 /**************************************************************************************************
  *   2. CREA UN NUEVO USUARIO CON PERMISOS DE ESCRITURA PARA LA TABLA "VIDEOS". LUEGO, INTENTA    *
  * REALIZAR UNA CONSULTA SELECT EN LA TABLA "VIDEOS" Y VERIFICA SI EL USUARIO TIENE PERMISOS PARA *
  *                                     REALIZAR ESTA ACCIÓN.                                      *
  **************************************************************************************************/
- CREATE ROLE readwrite;
- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE video TO readwrite ;
+ CREATE USER kiryu WITH PASSWORD 'admin123';
+ GRANT SELECT, INSERT, UPDATE, DELETE ON video TO kiryu;
+
+/*Me deja hacer cosicas, pero delete no porque se me olvido poner delete cascade para los comentarios y me dice 'nao nao, no puedes cargarte esto pq en comentarios se referencía al vídeo y eso no 'ta bien'*/
+
+/*Un insert y un update me deja sin problemas */
+ INSERT INTO video(id, title, description, url, usr_id) VALUES
+(11, 'Alejese señor!!!', 'ahhhhh', 'https://????????????????.com', 1);
+
+ UPDATE video
+ SET title = 'Let´s Play Inside ¡ALÉJATE DE MÍ!', description = 'Este sí que me ha acojonado... X´D', url = 'https://youtu.be/cQ3J2K_Xhlc'
+ WHERE id = 11; 
 
 
 /*************************************************************************************
