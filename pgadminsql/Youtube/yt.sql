@@ -138,7 +138,7 @@ Si, soy uno de los integrantes del equipo de traducción al español de este jue
  **************************************************************************************************/
  /*Aquí saré a Majima que el ya tiene SOLO permisos de de lectura*/
  REVOKE SELECT ON video FROM majima;
- GRANT SELECT ("id", "title", "url", "usr_id") ON video TO peter;
+ GRANT SELECT ("id", "title", "url", "usr_id") ON video TO majima;
  SELECT description FROM video;
 
  /*También probe a directamente, hacerle un:
@@ -153,6 +153,9 @@ Si, soy uno de los integrantes del equipo de traducción al español de este jue
  * 7. PERMISOS DE LECTURA SOLO PARA EL CAMPO TITULO DE LA TABLA VIDEOS AL USUARIO "PRACTICAS Y *
  *              VERIFICA SI EL USUARIO TIENE PERMISOS PARA REALIZAR ESTA ACCIÓN.               *
  ***********************************************************************************************/
+ REVOKE SELECT ON video FROM practicas;
+ GRANT SELECT ("title") ON video TO practicas;
+ SELECT description FROM video;
 
 
 /******************
