@@ -1,36 +1,36 @@
 /***********************************************
  * CREAR LAS TABLAS DENTRO DE LA BASE DE DATOS *
  ***********************************************/
-CREATE TABLE empleados (
+CREATE TABLE ark.empleados (
    id integer PRIMARY KEY,
    nombre VARCHAR(50),
    salario integer
 );
 
 
-CREATE TABLE departamentos (
+CREATE TABLE ark.departamentos (
    id integer PRIMARY KEY,
    id_empleado integer, 
 	FOREIGN KEY (id_empleado)
-	REFERENCES empleados(id)
+	REFERENCES ark.empleados(id)
 );
 
 
 
-CREATE TABLE proyectos (
+CREATE TABLE ark.proyectos (
    id integer PRIMARY KEY,
 	id_empleado integer,
 	FOREIGN KEY (id_empleado)
-	REFERENCES empleados(id)
+	REFERENCES ark.empleados(id)
 );
 
 
 
-CREATE TABLE empleados_proyectos (
+CREATE TABLE ark.empleados_proyectos (
    id integer PRIMARY KEY,
 	id_empleado integer,
 	FOREIGN KEY (id_empleado)
-	REFERENCES empleados(id)
+	REFERENCES ark.empleados(id)
 );
 
 
@@ -39,12 +39,12 @@ CREATE TABLE empleados_proyectos (
  * CREACIÓN DE USUARIOS *
  ************************/
 CREATE ROLE analista;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO analista;
+GRANT SELECT ON ALL TABLES IN SCHEMA ark TO analista;
 
 CREATE ROLE gerente;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO gerente;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA ark TO gerente;
 
-CREATE ROLE MAJIMA
+CREATE ROLE majima
 WITH
 CREATEDB
 CREATEROLE
@@ -54,7 +54,7 @@ CONNECTION LIMIT 2000;
 /***************************************************************************
  * REVOCAR QUE EL ROL 'GERENTE' PUEDA VER EL SALARIO EN LA TABLA EMPLEADOS *
  ***************************************************************************/
- GRANT UPDATE, DELETE, INSERT  ("id", "nombre") ON empleados TO MAJIMA;
+ GRANT UPDATE, DELETE, INSERT  ("id", "nombre") ON ark.empleados TO MAJIMA;
 
 
 /*****************************************************
@@ -75,11 +75,11 @@ CONNECTION LIMIT 2000;
 
  /* GRANT CREATE ON ALL TABLES TO bgonzalez; */
 
- /* * MAJIMA * */
+ /* * admin * */
  CREATE USER acasanova WITH PASSWORD 'patito';
- GRANT MAJIMA TO acasanova;
+ GRANT majima TO acasanova;
  CREATE USER rsegura WITH PASSWORD 'mazapan';
- GRANT MAJIMA, ALTER TO rsegura;
+ GRANT majima TO rsegura;
  CREATE USER smolina WITH PASSWORD 'cucudrilo';
- GRANT MAJIMA TO smolina;
+ GRANT majima TO smolina;
 
