@@ -8,7 +8,6 @@ CREATE TABLE empleados (
 );
 
 
-
 CREATE TABLE departamentos (
    id integer PRIMARY KEY,
    id_empleado integer, 
@@ -45,14 +44,17 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO analista;
 CREATE ROLE gerente;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO gerente;
 
-CREATE ROLE MAJIMA;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO MAJIMA;
+CREATE ROLE MAJIMA
+WITH
+CREATEDB
+CREATEROLE
+LOGIN
+CONNECTION LIMIT 2000;
 
 /***************************************************************************
  * REVOCAR QUE EL ROL 'GERENTE' PUEDA VER EL SALARIO EN LA TABLA EMPLEADOS *
  ***************************************************************************/
- REVOKE SELECT ON empleados FROM gerente;
- GRANT SELECT ("id", "nombre") ON empleados TO gerente;
+ GRANT UPDATE, DELETE, INSERT  ("id", "nombre") ON empleados TO MAJIMA;
 
 
 /*****************************************************
@@ -71,11 +73,13 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO MAJIMA;
  CREATE USER bgonzalez WITH PASSWORD 'west33';
  GRANT gerente TO bgonzalez;
 
+ /* GRANT CREATE ON ALL TABLES TO bgonzalez; */
+
  /* * MAJIMA * */
  CREATE USER acasanova WITH PASSWORD 'patito';
  GRANT MAJIMA TO acasanova;
  CREATE USER rsegura WITH PASSWORD 'mazapan';
- GRANT MAJIMA TO rsegura;
+ GRANT MAJIMA, ALTER TO rsegura;
  CREATE USER smolina WITH PASSWORD 'cucudrilo';
  GRANT MAJIMA TO smolina;
 
